@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul-Hameed Zakaria Esq - Law Firm Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Georgia', serif;
+            background: #1a1a1a;
+            color: #333;
+            padding: 20px;
+        }
+       .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fdfdfd;
+            border: 3px solid #b8860b;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.3);
+        }
+       .header {
+            background: linear-gradient(135deg, #2c3e50, #1a252f);
+            color: #d4af37;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 4px solid #b8860b;
+        }
+       .header h1 {
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+       .header h2 {
+            font-size: 18px;
+            font-weight: normal;
+            color: #ecf0f1;
+        }
+       .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+        }
+        button {
+            padding: 14px;
+            background: #2c3e50;
+            color: #d4af37;
+            border: 2px solid #b8860b;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #b8860b;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+        button.danger { background: #8b0000; border-color: #dc143c; color: white; }
+        button.danger:hover { background: #dc143c; }
+        button.success { background: #1e5a32; border-color: #27ae60; color: white; }
+        button.success:hover { background: #27ae60; }
+       .section {
+            display: none;
+            padding: 30px;
+            min-height: 400px;
+        }
+       .section.active { display: block; }
+       .section h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #b8860b;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #b8860b;
+            border-radius: 4px;
+            font-family: 'Georgia', serif;
+            font-size: 14px;
+        }
+        textarea { resize: vertical; min-height: 80px; }
+       .form-group { margin-bottom: 15px; }
+       .output {
+            background: #f4f4f4;
+            border: 1px solid #b8860b;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+       .error { color: #8b0000; font-weight: bold; }
+       .success-msg { color: #1e5a32; font-weight: bold; }
+       .client-card {
+            background: white;
+            border: 2px solid #b8860b;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            position: relative;
+        }
+       .client-card::before {
+            content: "⚖";
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #b8860b;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ABDUL-HAMEED ZAKARIA ESQ</h1>
+            <h2>LAW FIRM MANAGEMENT SYSTEM</h2>
+        </div>
+
+        <div class="menu">
+            <button onclick="showSection('register')">1. Register New Client</button>
+            <button onclick="showSection('view')">2. View Clients</button>
+            <button onclick="showSection('search')">3. Search Client</button>
+            <button onclick="showSection('update')">4. Update Client</button>
+            <button onclick="showSection('delete')">5. Delete Client</button>
+            <button onclick="showSection('report')">6. Case Report</button>
+            <button onclick="showSection('save')" class="success">7. Save Records</button>
+            <button onclick="exportCSV()" class="success">8. Export to CSV</button>
+        </div>
+
+        <!-- 1. Register New Client -->
+        <div id="register" class="section active">
+            <h3>Register New Client</h3>
+            <div class="form-group">
+                <label>Client ID:</label>
+                <input type="number" id="clientId">
+            </div>
+            <div class="form-group">
+                <label>Client Name:</label>
+                <input type="text" id="clientName">
+            </div>
+            <div class="form-group">
+                <label>Gender:</label>
+                <select id="clientGender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone Number:</label>
+                <input type="text" id="clientPhone">
+            </div>
+            <div class="form-group">
+                <label>Address:</label>
+                <textarea id="clientAddress"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Case Type:</label>
+                <input type="text" id="caseType" placeholder="e.g. Criminal, Civil, Family">
+            </div>
+            <div class="form-group">
+                <label>Case Description:</label>
+                <textarea id="caseDescription"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Hearing Date:</label>
+                <input type="text" id="hearingDate" placeholder="dd/mm/yyyy">
+            </div>
+            <div class="form-group">
+                <label>Case Status:</label>
+                <select id="caseStatus">
+                    <option value="">Select Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Adjourned">Adjourned</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Legal Fee: GH₵</label>
+                <input type="number" id="legalFee" step="0.01">
+            </div>
+            <button onclick="registerClient()">Register Client</button>
+            <div id="registerOutput" class="output"></div>
+        </div>
+
+        <!-- 2. View Clients -->
+        <div id="view" class="section">
+            <h3>All Registered Clients</h3>
+            <button onclick="viewClients()">Refresh List</button>
+            <div id="viewOutput" class="output"></div>
+        </div>
+
+        <!-- 3. Search Client -->
+        <div id="search" class="section">
+            <h3>Search Client</h3>
+            <label>Enter Client ID:</label>
+            <input type="number" id="searchId">
+            <button onclick="searchClient()">Search</button>
+            <div id="searchOutput" class="output"></div>
+        </div>
+
+        <!-- 4. Update Client -->
+        <div id="update" class="section">
+            <h3>Update Client</h3>
+            <label>Enter Client ID:</label>
+            <input type="number" id="updateId">
+            <button onclick="loadClientForUpdate()">Load Client</button>
+            <div id="updateForm" style="display:none;">
+                <div class="form-group">
+                    <label>New Client Name:</label>
+                    <input type="text" id="updateName">
+                </div>
+                <div class="form-group">
+                    <label>New Phone Number:</label>
+                    <input type="text" id="updatePhone">
+                </div>
+                <div class="form-group">
+                    <label>New Address:</label>
+                    <textarea id="updateAddress"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>New Case Type:</label>
+                    <input type="text" id="updateCaseType">
+                </div>
+                <div class="form-group">
+                    <label>New Case Description:</label>
+                    <textarea id="updateCaseDesc"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>New Hearing Date:</label>
+                    <input type="text" id="updateHearingDate">
+                </div>
+                <div class="form-group">
+                    <label>New Case Status:</label>
+                    <select id="updateCaseStatus">
+                        <option value="Active">Active</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Adjourned">Adjourned</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>New Legal Fee: GH₵</label>
+                    <input type="number" id="updateLegalFee" step="0.01">
+                </div>
+                <button onclick="updateClient()">Update Client Information</button>
+            </div>
+            <div id="updateOutput" class="output"></div>
+        </div>
+
+        <!-- 5. Delete Client -->
+        <div id="delete" class="section">
+            <h3>Delete Client</h3>
+            <label>Enter Client ID:</label>
+            <input type="number" id="deleteId">
+            <button onclick="deleteClient()" class="danger">Delete Client Record</button>
+            <div id="deleteOutput" class="output"></div>
+        </div>
+
+        <!-- 6. Case Report -->
+        <div id="report" class="section">
+            <h3>Case Report</h3>
+            <button onclick="generateReport()">Generate Report</button>
+            <div id="reportOutput" class="output"></div>
+        </div>
+
+        <!-- 7. Save Records -->
+        <div id="save" class="section">
+            <h3>Save Records</h3>
+            <button onclick="saveRecords()">Download LawFirmRecords.txt</button>
+            <div id="saveOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        let clients = [];
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            if (sectionId === 'view') viewClients();
+            if (sectionId === 'report') generateReport();
+        }
+
+        function clientIDExists(id) {
+            return clients.some(c => c.id === id);
+        }
+
+        function registerClient() {
+            const id = parseInt(document.getElementById('clientId').value);
+            const name = document.getElementById('clientName').value.trim();
+            const gender = document.getElementById('clientGender').value;
+            const phone = document.getElementById('clientPhone').value.trim();
+            const address = document.getElementById('clientAddress').value.trim();
+            const caseType = document.getElementById('caseType').value.trim();
+            const caseDescription = document.getElementById('caseDescription').value.trim();
+            const hearingDate = document.getElementById('hearingDate').value.trim();
+            const caseStatus = document.getElementById('caseStatus').value;
+            const legalFee = parseFloat(document.getElementById('legalFee').value);
+            const output = document.getElementById('registerOutput');
+
+            if (!id || clientIDExists(id)) {
+                output.innerHTML = '<span class="error">Client ID is invalid or already exists.</span>';
+                return;
+            }
+            if (!name ||!gender ||!phone ||!caseType ||!caseStatus) {
+                output.innerHTML = '<span class="error">Please fill all required fields.</span>';
+                return;
+            }
+
+            clients.push({
+                id, name, gender, phone, address, caseType,
+                caseDescription, hearingDate, caseStatus, legalFee
+            });
+
+            output.innerHTML = '<span class="success-msg">Client Registered Successfully.</span>';
+            document.querySelectorAll('#register input, #register textarea, #register select').forEach(el => el.value = '');
+        }
+
+        function viewClients() {
+            const output = document.getElementById('viewOutput');
+            if (clients.length === 0) {
+                output.innerHTML = 'No clients registered yet.';
+                return;
+            }
+            let html = '';
+            clients.forEach(c => {
+                html += `<div class="client-card">`;
+                html += `Client ID: ${c.id}\n`;
+                html += `Name: ${c.name}\n`;
+                html += `Gender: ${c.gender}\n`;
+                html += `Phone: ${c.phone}\n`;
+                html += `Address: ${c.address}\n`;
+                html += `Case Type: ${c.caseType}\n`;
+                html += `Case Description: ${c.caseDescription}\n`;
+                html += `Lawyer: ABDUL-HAMEED ZAKARIA ESQ\n`;
+                html += `Hearing Date: ${c.hearingDate}\n`;
+                html += `Case Status: ${c.caseStatus}\n`;
+                html += `Legal Fee: GH₵ ${c.legalFee.toFixed(2)}\n`;
+                html += `</div>`;
+            });
+            output.innerHTML = html;
+        }
+
+        function searchClient() {
+            const id = parseInt(document.getElementById('searchId').value);
+            const output = document.getElementById('searchOutput');
+            const client = clients.find(c => c.id === id);
+
+            if (!client) {
+                output.innerHTML = '<span class="error">Client not found.</span>';
+                return;
+            }
+
+            let html = 'Client Found\n\n';
+            html += `Name: ${client.name}\n`;
+            html += `Gender: ${client.gender}\n`;
+            html += `Phone: ${client.phone}\n`;
+            html += `Address: ${client.address}\n`;
+            html += `Case Type: ${client.caseType}\n`;
+            html += `Case Description: ${client.caseDescription}\n`;
+            html += `Lawyer: ABDUL-HAMEED ZAKARIA ESQ\n`;
+            html += `Hearing Date: ${client.hearingDate}\n`;
+            html += `Case Status: ${client.caseStatus}\n`;
+            html += `Legal Fee: GH₵ ${client.legalFee.toFixed(2)}`;
+            output.innerHTML = html;
+        }
+
+        function loadClientForUpdate() {
+            const id = parseInt(document.getElementById('updateId').value);
+            const output = document.getElementById('updateOutput');
+            const client = clients.find(c => c.id === id);
+
+            if (!client) {
+                output.innerHTML = '<span class="error">Client not found.</span>';
+                document.getElementById('updateForm').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('updateName').value = client.name;
+            document.getElementById('updatePhone').value = client.phone;
+            document.getElementById('updateAddress').value = client.address;
+            document.getElementById('updateCaseType').value = client.caseType;
+            document.getElementById('updateCaseDesc').value = client.caseDescription;
+            document.getElementById('updateHearingDate').value = client.hearingDate;
+            document.getElementById('updateCaseStatus').value = client.caseStatus;
+            document.getElementById('updateLegalFee').value = client.legalFee;
+            document.getElementById('updateForm').style.display = 'block';
+            output.innerHTML = '';
+        }
+
+        function updateClient() {
+            const id = parseInt(document.getElementById('updateId').value);
+            const output = document.getElementById('updateOutput');
+            const client = clients.find(c => c.id === id);
+
+            client.name = document.getElementById('updateName').value.trim();
+            client.phone = document.getElementById('updatePhone').value.trim();
+            client.address = document.getElementById('updateAddress').value.trim();
+            client.caseType = document.getElementById('updateCaseType').value.trim();
+            client.caseDescription = document.getElementById('updateCaseDesc').value.trim();
+            client.hearingDate = document.getElementById('updateHearingDate').value.trim();
+            client.caseStatus = document.getElementById('updateCaseStatus').value;
+            client.legalFee = parseFloat(document.getElementById('updateLegalFee').value);
+
+            output.innerHTML = '<span class="success-msg">Client Information Updated Successfully.</span>';
+            document.getElementById('updateForm').style.display = 'none';
+        }
+
+        function deleteClient() {
+            const id = parseInt(document.getElementById('deleteId').value);
+            const output = document.getElementById('deleteOutput');
+            const index = clients.findIndex(c => c.id === id);
+
+            if (index === -1) {
+                output.innerHTML = '<span class="error">Client not found.</span>';
+                return;
+            }
+
+            if (!confirm(`Delete client ${clients[index].name}? This cannot be undone.`)) return;
+
+            clients.splice(index, 1);
+            output.innerHTML = '<span class="success-msg">Client Record Deleted Successfully.</span>';
+            document.getElementById('deleteId').value = '';
+        }
+
+        function generateReport() {
+            const output = document.getElementById('reportOutput');
+            if (clients.length === 0) {
+                output.innerHTML = 'No clients to report.';
+                return;
+            }
+
+            let html = '========== CASE REPORT ==========\n\n';
+            clients.forEach(c => {
+                html += `Client: ${c.name}\n`;
+                html += `Case Type: ${c.caseType}\n`;
+                html += `Case Status: ${c.caseStatus}\n`;
+                html += `Hearing Date: ${c.hearingDate}\n`;
+                html += `Lawyer: ABDUL-HAMEED ZAKARIA ESQ\n`;
+                html += `Legal Fee: GH₵ ${c.legalFee.toFixed(2)}\n`;
+                html += '----------------------------------\n';
+            });
+
+            const totalFees = clients.reduce((sum, c) => sum + c.legalFee, 0);
+            html += `\nTOTAL CLIENTS: ${clients.length}\n`;
+            html += `TOTAL LEGAL FEES: GH₵ ${totalFees.toFixed(2)}`;
+            output.innerHTML = html;
+        }
+
+        function saveRecords() {
+            let content = '';
+            clients.forEach(c => {
+                content += `Client ID: ${c.id}\n`;
+                content += `Client Name: ${c.name}\n`;
+                content += `Gender: ${c.gender}\n`;
+                content += `Phone: ${c.phone}\n`;
+                content += `Address: ${c.address}\n`;
+                content += `Case Type: ${c.caseType}\n`;
+                content += `Case Description: ${c.caseDescription}\n`;
+                content += `Lawyer: ABDUL-HAMEED ZAKARIA ESQ\n`;
+                content += `Hearing Date: ${c.hearingDate}\n`;
+                content += `Case Status: ${c.caseStatus}\n`;
+                content += `Legal Fee: GH₵ ${c.legalFee.toFixed(2)}\n`;
+                content += '----------------------------------\n';
+            });
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LawFirmRecords.txt';
+            a.click();
+            document.getElementById('saveOutput').innerHTML = '<span class="success-msg">Records Saved Successfully.</span>';
+        }
+
+        // CSV Export - matches your C++ data structure
+        function exportCSV() {
+            if (clients.length === 0) {
+                alert('No clients to export.');
+                return;
+            }
+            let csv = 'Client ID,Name,Gender,Phone,Address,Case Type,Case Description,Lawyer,Hearing Date,Case Status,Legal Fee\n';
+            clients.forEach(c => {
+                csv += `${c.id},"${c.name}",${c.gender},${c.phone},"${c.address}","${c.caseType}","${c.caseDescription}",ABDUL-HAMEED ZAKARIA ESQ,${c.hearingDate},${c.caseStatus},${c.legalFee.toFixed(2)}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LawFirmClients.csv';
+            a.click();
+        }
+
+        // Auto-save to browser storage
+        setInterval(() => {
+            localStorage.setItem('lawfirm_clients', JSON.stringify(clients));
+        }, 2000);
+
+        // Load on startup
+        window.onload = () => {
+            const stored = localStorage.getItem('lawfirm_clients');
+            if (stored) clients = JSON.parse(stored);
+        };
+    </script>
+</body>
+</html>
